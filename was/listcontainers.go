@@ -17,6 +17,23 @@ func ListContainers(req *http.Request, r render.Render) {
 
 	resp := ListContainersResponse{}
 
+	resp.ServiceEndpoint = "fbs.local"
+	resp.Marker = "test"
+
+	resp.Containers = []ListContainersResponseContainer{
+		ListContainersResponseContainer{
+			Name: "test",
+			Properties: ListContainersResponseContainerProperties{
+				Etag: "yes",
+			},
+			Metadata: []ListContainersResponseContainerMetadata{
+				ListContainersResponseContainerMetadata{
+					XMLName: xml.Name{Local: "Key"},
+					Value:   "Value",
+				},
+			},
+		},
+	}
 	r.XML(200, resp)
 }
 
@@ -89,28 +106,29 @@ type ListContainersResponse struct {
 	Marker          string                            `xml:"Marker"`
 	MaxResults      uint                              `xml:"MaxResults"`
 	NextMarker      string                            `xml:"NextMarker"`
-	Containers      []ListContainersResponseContainer `xml:"Containers"`
+	Containers      []ListContainersResponseContainer `xml:">Containers"`
 }
 
 /*
 ListContainersResponseContainer ...
 */
 type ListContainersResponseContainer struct {
-	XMLName    xml.Name                                    `xml:"Container"`
-	Name       string                                      `xml:"name"`
-	Properties []ListContainersResponseContainerProperties `xml:"Properties"`
-	Metadata   []ListContainersResponseContainerMetadata   `xml:"Metadata"`
+	XMLName    xml.Name                                  `xml:"Container"`
+	Name       string                                    `xml:"name"`
+	Properties ListContainersResponseContainerProperties `xml:"Properties"`
+	Metadata   []ListContainersResponseContainerMetadata `xml:">Metadata"`
 }
 
 /*
 ListContainersResponseContainerProperties ...
 */
 type ListContainersResponseContainerProperties struct {
-	LastModified  string `xml:"Last-Modiefied"`
-	Etag          string `xml:"Etag"`
-	LeaseStatus   string `xml:"LeaseStatus"`
-	LeaseState    string `xml:"LeaseState"`
-	LeaseDuration string `xml:"LeaseDuration"`
+	XMLName       xml.Name `xml:"Properties"`
+	LastModified  string   `xml:"Last-Modiefied"`
+	Etag          string   `xml:"Etag"`
+	LeaseStatus   string   `xml:"LeaseStatus"`
+	LeaseState    string   `xml:"LeaseState"`
+	LeaseDuration string   `xml:"LeaseDuration"`
 }
 
 /*

@@ -1,8 +1,7 @@
 package main
 
 import (
-	"vcloud/was"
-
+	"github.com/bertsinnema/vcloud/was"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 )
